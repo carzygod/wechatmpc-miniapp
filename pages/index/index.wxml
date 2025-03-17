@@ -1,0 +1,14 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="sc_welcome">
+    <welcome />
+    <view class="{{['loginbtn', isLogin && 'disable']}}"  bindtap="login">
+      <text class="btn_text">{{btn_text}}</text>
+    </view>
+    <view class="tips">{{tips}}</view>
+  </view>
+  <view class="foot">
+    <view class="text-foot">Copyright © 2025 WechatMpc All Rights Reserved.</view>
+  </view>
+
+</scroll-view>

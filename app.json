@@ -1,0 +1,14 @@
+{
+    "pages": [
+      "pages/init/index",
+      "pages/index/index"
+    ],
+    "window": {
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+    },
+    "style": "v2",
+    "renderer": "webview",
+    "sitemapLocation": "sitemap.json",
+    "lazyCodeLoading": "requiredComponents"
+}

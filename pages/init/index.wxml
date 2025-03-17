@@ -1,0 +1,34 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="sc_welcome">
+    <homewelcome />
+
+<!-- 
+    <view class="logobox" >
+      <image
+      style="width: 350rpx; height: 350rpx;"
+      src="/assets/logo-emp0.png"
+      ></image>
+    </view> -->
+
+    <view class="inputbtn" >
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" password type="text" placeholder="Input your PIN code ..." />
+      </view>
+    </view>
+
+    <view class="{{['loginbtn', isLogin && 'disable']}}"  bindtap="login">
+      <text class="btn_text">{{"PIN码 登 录"}}</text>
+    </view>
+
+    <view class="{{['loginbtn', isLogin && 'disable']}}"  bindtap="login">
+      <text class="btn_text">{{"指 纹 登 录"}}</text>
+    </view>
+
+    <!-- <view class="tips">{{tips}}</view> -->
+  </view>
+  <view class="foot">
+    <view class="text-foot">Copyright © 2025 WechatMpc All Rights Reserved.</view>
+  </view>
+
+</scroll-view>
