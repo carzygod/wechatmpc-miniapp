@@ -1,7 +1,10 @@
 {
     "pages": [
-      "pages/init/index",
-      "pages/index/index"
+        "pages/init/index",
+        "pages/bio/bio",
+
+        "pages/index/index"
+       
     ],
     "window": {
         "navigationBarTextStyle": "black",

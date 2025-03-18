@@ -9,7 +9,11 @@ Page({
   },
   onLoad(option) {
     // console.log(option)
-
+    this.router.navigateTo(
+      {
+        url:"bio"
+      }
+    )
     //Model keypair test
     console.log(hd)
     //
@@ -31,21 +35,10 @@ Page({
 
   login(e) {
     let that = this
-    if (this.data.isLogin) {
-      wx.exitMiniProgram()
-      return
-    }
-    if (!this.data.scene) {
-      wx.showToast({
-        title: "请扫码进入",
-        icon: "error"
-      })
-      return
-    }
     wx.login({
       success: (res) => {
         wx.showLoading({
-          title: "登录中...",
+          title: "私钥恢复中",
           mask: true
         })
         wx.request({

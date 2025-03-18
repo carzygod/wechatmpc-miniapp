@@ -14,6 +14,11 @@
     - 使用iframe与该单页应用进行内容交互
     - 构建eventBus维持交互关系
     
+## 私钥恢复规则
+  - PIN 登录 [MPC]
+    - UUID + 字母表填充 + PIN码
+  - 指纹登录 [Local Bio]
+    - UUID + 生物识别UID
 
 ## 支持如下功能：
 

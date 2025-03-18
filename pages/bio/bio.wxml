@@ -1,0 +1,23 @@
+<!-- 页面 wxml 文件 -->
+<view class="container">
+  <view class="title">生物认证示例</view>
+  
+  <view class="info-box">
+    <view class="info-item">
+      <text class="label">是否支持生物认证：</text>
+      <text class="value">{{isSupported ? '支持' : '不支持'}}</text>
+    </view>
+    
+    <view class="info-item">
+      <text class="label">支持的认证方式：</text>
+      <text class="value">{{supportMode.length > 0 ? supportMode.join(', ') : '无'}}</text>
+    </view>
+  </view>
+  
+  <button type="primary" bindtap="startSoterAuth" disabled="{{!isSupported}}">开始生物认证</button>
+  
+  <view class="result-box" wx:if="{{authResult}}">
+    <text class="result-title">认证结果：</text>
+    <text class="result-content">{{authResult}}</text>
+  </view>
+</view>
