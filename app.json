@@ -2,9 +2,8 @@
     "pages": [
         "pages/init/index",
         "pages/bio/bio",
-
-        "pages/index/index"
-       
+        "pages/index/index",
+        "pages/management/management"
     ],
     "window": {
         "navigationBarTextStyle": "black",

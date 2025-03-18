@@ -61,8 +61,6 @@ Page({
       });
       return;
     }
-
-    // 选择支持的认证方式
     const authMode = this.data.supportMode.includes('fingerPrint') ? 'fingerPrint' : 
                      this.data.supportMode.includes('facial') ? 'facial' : '';
     
@@ -73,24 +71,16 @@ Page({
       });
       return;
     }
-
-    // 获取挑战因子，正式环境应该从服务器获取
     const challenge = 'challenge_code_from_server';
-
-    // 开始认证
     wx.startSoterAuthentication({
-      requestAuthModes: [authMode], // 请求认证的方式
-      challenge: challenge, // 挑战因子，正式环境中应该从服务器获取
-      authContent: '请进行生物认证以验证身份', // 验证描述
+      requestAuthModes: [authMode],
+      challenge: challenge, 
+      authContent: '请进行生物认证以验证身份',
       success: function(res) {
         console.log('生物认证成功:', res);
         that.setData({
           authResult: '认证成功：' + JSON.stringify(res)
         });
-        
-        // 认证成功后，可以将结果发送到服务器进行验证
-        // 包含 res.resultJSON 和 res.resultJSONSignature
-        that.sendAuthResultToServer(res.resultJSON, res.resultJSONSignature);
       },
       fail: function(err) {
         console.error('生物认证失败:', err);
@@ -106,23 +96,4 @@ Page({
     });
   },
 
-  // 将认证结果发送到服务器进行验证
-  sendAuthResultToServer: function(resultJSON, resultJSONSignature) {
-    // 这里应该使用 wx.request 将结果发送到自己的服务器
-    wx.request({
-      url: 'https://your-server.com/verify-soter', // 替换为您的服务器地址
-      method: 'POST',
-      data: {
-        resultJSON: resultJSON,
-        resultJSONSignature: resultJSONSignature
-      },
-      success: function(res) {
-        console.log('服务器验证结果:', res.data);
-        // 根据服务器返回的结果执行后续操作
-      },
-      fail: function(err) {
-        console.error('服务器验证失败:', err);
-      }
-    });
-  }
 });

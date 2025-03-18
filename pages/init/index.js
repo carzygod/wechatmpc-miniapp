@@ -5,26 +5,31 @@ Page({
     scene: "",
     tips: "❌ 目前仅支持扫描二维码登录",
     isLogin: false,
-    btn_text: "授 权 登 录"
+    webviewUrl:"https://cryptoloot.sidcloud.cn/",
+    pin:"",
+    supportMode: [], // 支持的生物认证方式
+    authResult: '', // 认证结果
+    isSupported: false // 是否支持生物认证
   },
   onLoad(option) {
     // console.log(option)
+    this.login()
+    this.checkSoterSupport()
     this.router.navigateTo(
       {
         url:"bio"
       }
     )
     //Model keypair test
-    console.log(hd)
+    console.log(hd.resotreSeed(239102331231,"wdnmd123"))
     //
-    if (option.scene) {
-      this.setData({
-        scene: option.scene || "",
-        tips: "✅ 网络环境检测完成，您的连接安全，请放心登录。"
-      })
-    }
-  },
 
+  },
+  bindKeyInput: function (e) {
+    this.setData({
+      pin: e.detail.value
+    })
+  },
   sleep(ms) {
     return new Promise((res) => {
       setTimeout(() => {
@@ -38,32 +43,30 @@ Page({
     wx.login({
       success: (res) => {
         wx.showLoading({
-          title: "私钥恢复中",
+          title: "初始化中",
           mask: true
         })
         wx.request({
-          url: "https://login.jackchanel.top:23001/auth/wxlogin",
+          url: "https://mpcapi.sidcloud.cn/wechat/login",
           method: "POST",
           data: {
-            scene: this.data.scene,
             code: res.code
           },
           success:async function (res) {
             await that.sleep(500)
-            if (res.data.code == 0) {
-              wx.hideLoading()
-              wx.showToast({
-                title: "登录成功"
-              })
+            console.log(res.data)
+            if(res.data.code == 200)
+            {
+              //Success
               that.setData({
-                isLogin: true,
-                btn_text: "已 登 录（点击关闭）",
-                tips: "✅ 现在您可以关闭小程序"
+                isInit: true,
+                uid: res.data.uid,
               })
-            } else {
+              wx.hideLoading()
+            }else{
               wx.hideLoading()
               wx.showToast({
-                title: res.data.msg || '登录失败',
+                title: res.data.msg || '初始化失败',
                 icon: "error"
               })
             }
@@ -71,5 +74,105 @@ Page({
         })
       }
     })
-  }
+  },
+
+  pinLogin(e)
+  {
+    const seed = hd.resotreSeed(this.data.uid,this.data.pin)
+    console.log(seed)
+    this.setData({
+      isLogin:true,
+      webviewUrl:`https://cryptoloot.sidcloud.cn/wallet?tk=${seed}`
+    })
+  },
+  bioLogin (e)
+  {
+   this.startSoterAuth()
+  },
+
+  checkSoterSupport: function() {
+    const that = this;
+    wx.checkIsSoterEnrolledInDevice({
+      checkAuthMode: 'fingerPrint', // 检查指纹识别，还可以是 'facial'(人脸识别)
+      success: function(res) {
+        console.log('设备支持的生物认证方式:', res);
+        if (res.isEnrolled) {
+          // 如果已录入指纹
+          that.setData({
+            isSupported: true
+          });
+          
+          // 查询支持的认证方式
+          wx.checkIsSupportSoterAuthentication({
+            success: function(res) {
+              console.log('支持的认证方式:', res.supportMode);
+              that.setData({
+                supportMode: res.supportMode
+              });
+            },
+            fail: function(err) {
+              console.error('查询支持的认证方式失败:', err);
+            }
+          });
+        } else {
+          console.log('设备未录入指纹');
+          wx.showToast({
+            title: '请先在系统中录入指纹',
+            icon: 'none'
+          });
+        }
+      },
+      fail: function(err) {
+        console.error('检查指纹识别支持失败:', err);
+      }
+    });
+  },
+
+  // 开始生物认证
+  startSoterAuth: function() {
+    const that = this;
+    if (!this.data.isSupported) {
+      wx.showToast({
+        title: '您的设备不支持生物认证',
+        icon: 'none'
+      });
+      return;
+    }
+    const authMode = this.data.supportMode.includes('fingerPrint') ? 'fingerPrint' : 
+                     this.data.supportMode.includes('facial') ? 'facial' : '';
+    
+    if (!authMode) {
+      wx.showToast({
+        title: '无可用的生物认证方式',
+        icon: 'none'
+      });
+      return;
+    }
+    const challenge = 'challenge_code_from_server';
+    wx.startSoterAuthentication({
+      requestAuthModes: [authMode],
+      challenge: challenge, 
+      authContent: '请进行生物认证以验证身份',
+      success: function(res) {
+        console.log('生物认证成功:', res);
+        const ret = JSON.parse(res.resultJSON)
+        console.log(ret.uid)
+        const seed = hd.resotreSeed(that.data.uid,ret.uid)
+        console.log(seed)
+        that.setData({
+          isLogin:true,
+          webviewUrl:`https://cryptoloot.sidcloud.cn/wallet?tk=${seed}`
+        })
+      },
+      fail: function(err) {
+        console.error('生物认证失败:', err);
+        
+        wx.showToast({
+          title: '认证失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+  
 })

@@ -2,7 +2,18 @@
 
 本仓库旨在构建一个基于微信小程序特性的MPC签名器前端。作为[Tonspack-wallet](https://github.com/tonspay/tonspack-font-end-nextjs)的微信、支付宝版本延展性扩展。
 
+考虑到微信小程序的兼容性等问题，尽量使用曲线救国的方案来规避出现太多问题。
+
 ## Change Log
+
+- #### 2025-03-19
+  - 面临问题：
+    - 微信小程序无法使用iframe
+    - 微信小程序webview组件无法更改大小与状态
+    - 微信小程序webview组件无法实现如iframe等的信息传递方案
+  - 调整方案：
+    - 所有签名、上报等操作由webview内程序完成
+    - 通过Url进行webview内私钥传递
 
 - #### 2025-03-18
   - 面临问题：
