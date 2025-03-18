@@ -1,4 +1,5 @@
 // init.js
+const hd = require("../../core/wallet")
 Page({
   data: {
     scene: "",
@@ -8,6 +9,10 @@ Page({
   },
   onLoad(option) {
     // console.log(option)
+
+    //Model keypair test
+    console.log(hd)
+    //
     if (option.scene) {
       this.setData({
         scene: option.scene || "",
