@@ -1,5 +1,6 @@
 {
     "pages": [
+        "pages/QR/QR",
         "pages/init/index",
         "pages/bio/bio",
         "pages/index/index",
